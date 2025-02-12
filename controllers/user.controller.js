@@ -63,7 +63,12 @@ export const login = async (req, res) => {
     if (!isMatch) return res.status(400).json({ msg: "Invalid credentials" });
 
     const token = jwt.sign({ id: user._id }, key, { expiresIn: "1d" });
-    return res.json({ token, user });
+    return res
+    .cookie("access_token", token, {
+      httpOnly: true,
+      maxAge:24*60*60*1000})
+    .json({user});
+
   } catch (error) {
     return res.status(500).json({ error });
   }
@@ -90,3 +95,18 @@ export const getProfile = async (req, res) => {
     }
   };
   
+
+export const getUser =async (req,res)=>{
+  try{
+   const userId = req.userId;
+   const checkUser = await User.findById(userId);
+   console.log(checkUser);
+   if(!checkUser){
+    return res.status(400).json({message:"User can't found!!"});
+   }
+   res.status(200).json(checkUser);
+
+  }catch(error){
+    res.status(500).json({message:error.message})
+  }
+}
