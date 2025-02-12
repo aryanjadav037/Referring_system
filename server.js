@@ -18,7 +18,7 @@ app.use("/users", UserRouter);
 
 // Connect to MongoDB
 mongoose
-  .connect(process.env.MONGO_URI || 'mongodb://localhost:27017', {dbName:"referral"})
+  .connect(process.env.MONGO_URI , {dbName:"temp"})
   .then(() => {
     console.log("MongoDB connected successfully");
     app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
